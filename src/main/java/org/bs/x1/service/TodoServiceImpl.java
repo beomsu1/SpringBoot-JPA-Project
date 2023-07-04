@@ -1,6 +1,7 @@
 package org.bs.x1.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bs.x1.domain.Todo;
@@ -58,6 +59,39 @@ public class TodoServiceImpl implements TodoService{
         return modelMapper.map(result, TodoDTO.class);
 
 
+    }
+
+    // 조회
+    @Override
+    public TodoDTO getOne(Long tno) {
+        
+       Optional<Todo> result = todoRepository.findById(tno);
+
+       Todo todo = result.orElseThrow();
+
+       // todo -> TodoDTO로 변환
+       TodoDTO dto = modelMapper.map(todo, TodoDTO.class);
+
+       return dto;
+    }
+
+    // 삭제
+    @Override
+    public void remove(Long tno) {
+        todoRepository.deleteById(tno);
+    }
+
+    //수정
+    @Override
+    public void modify(TodoDTO dto) {
+
+        Optional<Todo> result = todoRepository.findById(dto.getTno());
+
+        Todo todo = result.orElseThrow();
+
+        todo.changeTitle(dto.getTitle());
+
+        todoRepository.save(todo);
     }
     
 }

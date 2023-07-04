@@ -13,25 +13,31 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 @Entity
-@Table(name= "tbl_todo2")
+@Table(name="t_board")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 @ToString
 @Getter
-public class Todo {
+public class Board extends BaseEntity{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
-    private Long tno;
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // autoIncrement
+    private Long bno;
 
-    @Column(length = 300 , nullable = false)
+    // 길이 200 , not null
+    @Column(length = 200 , nullable = false)
     private String title;
 
-    // 받아온 title을 컬럼 title에 대입
+    @Column(length = 1000 , nullable = false)
+    private String content;
+
+    @Column(length = 50 , nullable = false)
+    private String writer;
+
+    // 함수에 전달되는 값으로(함수의 실행결과) title을 받고 Board에 있는 title에 그 값을 저장한다!
     public void changeTitle(String title){
         this.title=title;
     }
-
     
 }
