@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 import org.bs.x1.domain.Board;
 import org.bs.x1.domain.QBoard;
 import org.bs.x1.domain.QReply;
+import org.bs.x1.dto.BoardListRcntDTO;
+import org.bs.x1.dto.PageRequestDTO;
+import org.bs.x1.dto.PageResponseDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +16,7 @@ import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport
 
 import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.Tuple;
+import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.JPQLQuery;
 
 import lombok.extern.log4j.Log4j2;
@@ -82,9 +86,12 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
     public Page<Object[]> searchWithRcnt(String searchType, String keyword, Pageable pageable) {
 
         // Querydsl
+        // Querydsl 라이브러리 사용 -> 쿼리 작성 실행 가능
+        // QBoard , QReply -> Entity 클래스인 Board , Reply를 기반으로 자동 생성된 Q타입 클래스
         QBoard board = QBoard.board;
         QReply reply = QReply.reply;
 
+        // Board 엔티티를 조회하는 JPQL 쿼리를 생성 -> query로 참조가능
         JPQLQuery<Board> query = from(board);
         
         // reply 를 leftjoin -> reply.board == board
@@ -139,5 +146,83 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         log.info("count: " + count );
         
         return new PageImpl<>(arrList, pageable, count);
+    }
+
+    @Override
+    public PageResponseDTO<BoardListRcntDTO> searchDTORcnt(PageRequestDTO requestDTO) {
+
+        // requestDTO에 담긴 페이지네이션 정보를 전달하여 pageable 객체 생성
+        Pageable pageable = makePageable(requestDTO);
+
+        // Querydsl 라이브러리 사용 -> 쿼리 작성 실행 가능
+        // QBoard , QReply -> Entity 클래스인 Board , Reply를 기반으로 자동 생성된 Q타입 클래스
+        QBoard board = QBoard.board;
+        QReply reply = QReply.reply;
+
+        // Board 엔티티를 조회하는 JPQL 쿼리를 생성 -> query로 참조가능
+        JPQLQuery<Board> query = from(board);
+
+        // leftJoin 하는 코드
+        // reply - leftJoin -> reply.board == board
+        query.leftJoin(reply).on(reply.board.eq(board));
+
+        // keyword , searchType 변수 생성
+        String keyword = requestDTO.getKeyword();
+        String searchType = requestDTO.getType();
+
+        // 키워드가 not null , searchType이 not null ->
+        if (keyword != null && searchType != null){
+
+            // 문자열을 배열로 쪼개기
+            String [] searchArr = searchType.split("");
+
+            // BooleanBuilder -> 우선연산자 생성 , 조건문을 동적으로 생성
+            BooleanBuilder searchBuilder = new BooleanBuilder();
+
+            for (String type : searchArr) {
+                switch(type){
+                    // 검색조건
+                    case "t" -> searchBuilder.or(board.title.contains(keyword));
+                    case "c" -> searchBuilder.or(board.content.contains(keyword));
+                    case "w" -> searchBuilder.or(board.writer.contains(keyword));
+                }
+            } // end for
+
+            // where 절에 추가
+            query.where(searchBuilder);
+        }
+
+        // 쿼리에 페이지네이션 적용
+        this.getQuerydsl().applyPagination(pageable, query);
+
+        // board로 groupBy
+        query.groupBy(board);
+        
+        JPQLQuery<BoardListRcntDTO> listQuery = 
+        // select 절
+        query.select(Projections.bean(
+            // 조회 결과를 매핑할 DTO 객체 타입 지정
+            BoardListRcntDTO.class,
+            board.bno,
+            board.title,
+            board.writer,
+            reply.countDistinct().as("replyCount")
+            )
+        );
+
+        // listQuery에 설정된 쿼리를 실행하고 결과를 List<BoardLiStRcntDTO>타입으로 반환 
+        List<BoardListRcntDTO> list = listQuery.fetch();
+
+        log.info("---------------");
+        log.info(list);
+
+        // totalCount값 호출
+        Long totalCount = listQuery.fetchCount();
+
+        log.info("---------------");
+        log.info(totalCount);
+        
+        // PageResponseDTO의 파라미터 타입을 (List<E> dtoList , long totalCount , PageRequestDTO pageRequestDTO) 설정했기에
+        return new PageResponseDTO<>(list, totalCount, requestDTO);
     }
 }
