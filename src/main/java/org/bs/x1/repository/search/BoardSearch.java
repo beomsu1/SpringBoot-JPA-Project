@@ -11,5 +11,9 @@ public interface BoardSearch {
     // 페이징 처리 , switch문 (검색 조건) (String searchType , String keyword 추가)
     Page<Board> search1(String searchType , String keyword ,Pageable pageable);
 
+    // 페이지 처리 , object[]로 받기
+    Page<Object[]> searchWithRcnt(String searchType , String keyword , Pageable pageable);
+
+
 
 }
