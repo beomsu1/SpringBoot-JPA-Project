@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bs.x1.domain.Board;
+import org.bs.x1.dto.BoardListRcntDTO;
+import org.bs.x1.dto.PageRequestDTO;
+import org.bs.x1.dto.PageResponseDTO;
 import org.bs.x1.repository.search.BoardSearch;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,6 +206,19 @@ public class BoardRepositoryTests {
         Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
 
         boardRepository.searchWithRcnt("tcw", "1", pageable);
+    }
+
+    @Test
+    public void testSearchDTORcnt(){
+
+        // 기본적인 PageRequsetDTO 설정을 보내주기 위해
+        // page = 1; size = 10;
+        PageRequestDTO requestDTO = new PageRequestDTO();
+
+        PageResponseDTO<BoardListRcntDTO> responseDTO = 
+        boardRepository.searchDTORcnt(requestDTO);
+    
+        log.info(responseDTO);
     }
     
 }

@@ -78,7 +78,7 @@ public class ReplyRepositoryTests {
     public void listBoardTest(){
 
         // bno 값을 설정하자
-        Long bno = 99L;
+        Long bno = 92L;
 
         // 페이지 처리를 하자 . rno를 오름차순으로 정렬
         Pageable pageable = PageRequest.of(0, 10, Sort.by("rno").ascending());
