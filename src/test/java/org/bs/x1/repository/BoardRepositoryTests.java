@@ -183,5 +183,26 @@ public class BoardRepositoryTests {
 
         result.get().forEach(b -> log.info(b));
     }
+
+    // 리스트 와 댓글개수
+    @Test
+    public void testListWithRcnt(){
+
+        List<Object[]> result = boardRepository.getListWithRcnt();
+
+        for (Object[] result2 : result) {
+            log.info(Arrays.toString(result2));
+        }
+    }
+
+    // Querydsl 조인코드
+    @Test
+    public void testLishWithRcntSearch(){
+
+        // bno를 내림차순
+        Pageable pageable = PageRequest.of(0, 10, Sort.by("bno").descending());
+
+        boardRepository.searchWithRcnt("tcw", "1", pageable);
+    }
     
 }

@@ -54,6 +54,8 @@ dependencies {
 
             "com.querydsl:querydsl-apt:${queryDslVersion}:jakarta")
 
+			implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
 	
 }
 

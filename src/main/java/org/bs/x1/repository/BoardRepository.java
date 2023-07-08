@@ -46,4 +46,9 @@ public interface BoardRepository extends JpaRepository<Board,Long> ,BoardSearch{
     // 기본 SQL에 사용하는 문법을 사용한다. 동적으로 접근하는거라 JPA에 위반!
     @Query( value =  "select * from t_board" , nativeQuery = true)
     List<Object[]> listNative();
+
+    // 댓글 갯수
+    // Object의 배열로 bno ,title , writer , board , reply join
+    @Query("select b.bno, b.title, b.writer , count(r) from Board b left outer join Reply r on r.board = b group by b order by b.bno desc")
+    List<Object[]> getListWithRcnt();
 }
