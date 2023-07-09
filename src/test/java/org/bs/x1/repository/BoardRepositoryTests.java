@@ -208,6 +208,7 @@ public class BoardRepositoryTests {
         boardRepository.searchWithRcnt("tcw", "1", pageable);
     }
 
+    // 게시물의 정보 리스트 출력
     @Test
     public void testSearchDTORcnt(){
 
