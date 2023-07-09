@@ -47,6 +47,9 @@ public class PageResponseDTO<E> {
         // 범위에 해당하는 마지막 페이지 번호 저장
         this.end = tempEnd > realEnd ? realEnd : tempEnd;
 
+        // 다음 페이지로 넘어가는 로직
+        this.next = (this.end * this.size) < totalCount;
+
         // start와 end 까지의 범위를 계산해서 pageNums 생성
         // boxed() -> IntStream을 Stream<Integer> 타입으로 변경
         this.pageNums = IntStream.rangeClosed(start, end).boxed().toList();
