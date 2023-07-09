@@ -1,6 +1,7 @@
 package org.bs.x1.dto;
 
 import java.util.List;
+import java.util.stream.IntStream;
 
 import lombok.Data;
 
@@ -31,7 +32,24 @@ public class PageResponseDTO<E> {
         this.page = pageRequestDTO.getPage();
         this.size = pageRequestDTO.getSize();
 
-        
+        // 범위에 해당하는 마지막 페이지 번호 구하는 방법
+        int tempEnd =(int)(Math.ceil(page/10.0)*10);
+
+        // 시작 페이지 번호
+        this.start = tempEnd-9;
+
+        // start가 1이 아닐때 prev 활성화
+        this.prev = start != 1;
+
+        // 총 페이지 번호
+        int realEnd = (int)(Math.ceil(totalCount/(double)size));
+
+        // 범위에 해당하는 마지막 페이지 번호 저장
+        this.end = tempEnd > realEnd ? realEnd : tempEnd;
+
+        // start와 end 까지의 범위를 계산해서 pageNums 생성
+        // boxed() -> IntStream을 Stream<Integer> 타입으로 변경
+        this.pageNums = IntStream.rangeClosed(start, end).boxed().toList();
 
     }
 
