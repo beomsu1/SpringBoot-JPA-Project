@@ -1,14 +1,19 @@
 package org.bs.x1.repository.search;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bs.x1.domain.Board;
 import org.bs.x1.domain.QBoard;
 import org.bs.x1.domain.QReply;
+import org.bs.x1.dto.BoardDTO;
 import org.bs.x1.dto.BoardListRcntDTO;
 import org.bs.x1.dto.PageRequestDTO;
 import org.bs.x1.dto.PageResponseDTO;
+import org.bs.x1.repository.BoardRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -23,7 +28,7 @@ import lombok.extern.log4j.Log4j2;
 
 @Log4j2
 public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardSearch{
-    
+
     public BoardSearchImpl(){
         super(Board.class);
     }
@@ -225,4 +230,6 @@ public class BoardSearchImpl extends QuerydslRepositorySupport implements BoardS
         // PageResponseDTO의 파라미터 타입을 (List<E> dtoList , long totalCount , PageRequestDTO pageRequestDTO) 설정했기에
         return new PageResponseDTO<>(list, totalCount, requestDTO);
     }
+
+
 }

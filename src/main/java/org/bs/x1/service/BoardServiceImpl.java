@@ -1,5 +1,9 @@
 package org.bs.x1.service;
 
+import java.util.Optional;
+
+import org.bs.x1.domain.Board;
+import org.bs.x1.dto.BoardDTO;
 import org.bs.x1.dto.BoardListRcntDTO;
 import org.bs.x1.dto.PageRequestDTO;
 import org.bs.x1.dto.PageResponseDTO;
@@ -28,6 +32,19 @@ public class BoardServiceImpl implements BoardService{
         log.info(pageRequestDTO);
 
         return boardRepository.searchDTORcnt(pageRequestDTO);
+    }
+
+    // 조회
+    @Override
+    public BoardDTO getOne(Long bno) {
+
+        Optional<Board> result = boardRepository.findById(bno);
+
+        Board board = result.orElseThrow();
+
+        BoardDTO dto = modelMapper.map(board, BoardDTO.class);
+
+        return dto;
     }
     
 }

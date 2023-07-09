@@ -3,6 +3,7 @@ package org.bs.x1.repository.search;
 import java.util.List;
 
 import org.bs.x1.domain.Board;
+import org.bs.x1.dto.BoardDTO;
 import org.bs.x1.dto.BoardListRcntDTO;
 import org.bs.x1.dto.PageRequestDTO;
 import org.bs.x1.dto.PageResponseDTO;
@@ -33,6 +34,7 @@ public interface BoardSearch {
         return pageable;
 
     }
+
 
 
 }

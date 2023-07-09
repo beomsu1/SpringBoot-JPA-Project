@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.bs.x1.domain.Board;
 import org.bs.x1.dto.BoardListRcntDTO;
+import org.bs.x1.dto.BoardReadDTO;
 import org.bs.x1.dto.PageRequestDTO;
 import org.bs.x1.dto.PageResponseDTO;
 import org.bs.x1.repository.search.BoardSearch;
@@ -220,6 +221,20 @@ public class BoardRepositoryTests {
         boardRepository.searchDTORcnt(requestDTO);
     
         log.info(responseDTO);
+    }
+
+    // 조회
+    @Test
+    public void testReadOne(){
+
+        Long bno = 77L;
+
+        BoardReadDTO dto = boardRepository.readOne(bno);
+
+        log.info("------------");
+        log.info(dto);
+        log.info(dto.getRegDate());
+        log.info(dto.getModDate());
     }
     
 }

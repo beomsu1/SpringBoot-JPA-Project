@@ -1,6 +1,7 @@
 package org.bs.x1.repository;
 
 import org.bs.x1.domain.Board;
+import org.bs.x1.dto.BoardReadDTO;
 import org.bs.x1.repository.search.BoardSearch;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -51,4 +52,8 @@ public interface BoardRepository extends JpaRepository<Board,Long> ,BoardSearch{
     // Object의 배열로 bno ,title , writer , board , reply join
     @Query("select b.bno, b.title, b.writer , count(r) from Board b left outer join Reply r on r.board = b group by b order by b.bno desc")
     List<Object[]> getListWithRcnt();
+
+    // 조회
+    @Query("select b from Board b where b.bno = :bno")
+    BoardReadDTO readOne(@Param("bno") Long bno);
 }
