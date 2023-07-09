@@ -89,6 +89,15 @@ public class ReplyRepositoryTests {
         result.get().forEach(r -> log.info(r));
     }
 
+    // 댓글 달린 게시글 개수 조회
+    @Test
+    public void testCount(){
+        Long bno = 92L;
+
+        log.info("-------------------------");
+        log.info(replyRepository.getCountBoard(bno));
+    }
+
 
     
 }

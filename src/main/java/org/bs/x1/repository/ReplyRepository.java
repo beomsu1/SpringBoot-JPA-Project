@@ -15,4 +15,7 @@ public interface ReplyRepository extends JpaRepository<Reply,Long>{
     // pageable을 사용하면 반환값은 무조건 Page;
     Page<Reply> listBoard(@Param("bno") Long bno , Pageable pageable); //@Param 빼먹지 말자
     
+    // 댓글 달린 게시글 개수 조회
+    @Query("select count(r) from Reply r where r.board.bno =:bno")
+    long getCountBoard(@Param("bno") Long bno);
 }
