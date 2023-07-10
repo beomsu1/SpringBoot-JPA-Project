@@ -1,7 +1,12 @@
 package org.bs.x1.repository;
 
+import java.util.Map;
+
 import org.bs.x1.domain.Board;
 import org.bs.x1.domain.Reply;
+import org.bs.x1.dto.ReplyDTO;
+import org.bs.x1.dto.ReplyPageRequestDTO;
+import org.bs.x1.service.ReplyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -9,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -19,6 +25,9 @@ public class ReplyRepositoryTests {
     //의존성 주입
     @Autowired
     private ReplyRepository replyRepository;
+
+    @Autowired
+    private ReplyService replyService;
 
     // reply insert
 
@@ -96,6 +105,17 @@ public class ReplyRepositoryTests {
 
         log.info("-------------------------");
         log.info(replyRepository.getCountBoard(bno));
+    }
+
+    @Test
+    public void testListLast(){
+
+        ReplyPageRequestDTO requestDTO = ReplyPageRequestDTO.builder()
+        .bno(99L)
+        .last(true)
+        .build(); 
+
+        log.info(replyService.list(requestDTO));
     }
 
 

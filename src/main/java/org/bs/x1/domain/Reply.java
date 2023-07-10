@@ -38,6 +38,14 @@ public class Reply {
     @ManyToOne(fetch = FetchType.LAZY)
     public Board board;
 
+    public void changeText(String text){
+        this.replyText = text;
+    }
+
+    public void changeFile(String fileName){
+        this.replyFile = fileName;
+    }
+
 
     
 }

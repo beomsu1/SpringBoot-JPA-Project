@@ -11,14 +11,14 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ReplyRequestDTO {
+public class ReplyPageRequestDTO extends PageRequestDTO{
     
     private Long bno;
 
     @Builder.Default
     private int page =1;
     @Builder.Default
-    private int size = 50;
+    private int size = 20;
 
     private boolean last;
 }
