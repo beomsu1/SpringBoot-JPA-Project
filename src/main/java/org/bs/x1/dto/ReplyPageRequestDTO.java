@@ -11,7 +11,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class ReplyRequestDTO {
+public class ReplyPageRequestDTO extends PageRequestDTO{
     
     private Long bno;
 

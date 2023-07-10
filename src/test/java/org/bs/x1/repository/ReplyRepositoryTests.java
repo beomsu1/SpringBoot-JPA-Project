@@ -2,6 +2,8 @@ package org.bs.x1.repository;
 
 import org.bs.x1.domain.Board;
 import org.bs.x1.domain.Reply;
+import org.bs.x1.dto.ReplyPageRequestDTO;
+import org.bs.x1.service.ReplyService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,6 +21,9 @@ public class ReplyRepositoryTests {
     //의존성 주입
     @Autowired
     private ReplyRepository replyRepository;
+
+    @Autowired
+    private ReplyService replyService;
 
     // reply insert
 
@@ -96,6 +101,17 @@ public class ReplyRepositoryTests {
 
         log.info("-------------------------");
         log.info(replyRepository.getCountBoard(bno));
+    }
+
+    @Test
+    public void testListLast(){
+
+        ReplyPageRequestDTO requestDTO = ReplyPageRequestDTO.builder()
+        .bno(99L)
+        .last(true)
+        .build(); 
+
+        log.info(replyService.list(requestDTO));
     }
 
 
