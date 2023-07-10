@@ -19,6 +19,6 @@ public class BoardListRcntDTO {
     private Long bno;
     private String title;
     private String writer;
-    private long replycount;
+    private long replyCount;
     
 }

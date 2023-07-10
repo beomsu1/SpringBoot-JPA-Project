@@ -1,6 +1,7 @@
 package org.bs.x1.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.bs.x1.domain.Reply;
@@ -65,5 +66,63 @@ public class ReplyServiceImpl implements ReplyService {
         PageResponseDTO<ReplyDTO> responseDTO = new PageResponseDTO<>(dtoList, totalReplyCount, requestDTO);
         responseDTO.setPage(pageNum);
         return responseDTO;
+    }
+
+    // 등록
+    @Override
+    public Long register(ReplyDTO replyDTO) {
+
+        // Reply로 변환하는 이유 : 데이터의 저장 또는 처리를 위해 Reply 엔티티 객체를 사용해야 할 때가 있기에
+        Reply reply = modelMapper.map(replyDTO, Reply.class);
+
+        log.info(reply);
+
+        // reply에 있는 rno를 가져와서 newRno를 만듬
+        Long newRno = replyRepository.save(reply).getRno();
+
+        return newRno;
+    }
+
+    // 조회
+    @Override
+    public ReplyDTO read(Long rno) {
+
+        Optional<Reply> result = replyRepository.findById(rno);
+
+        Reply reply = result.orElseThrow();
+
+        return modelMapper.map(reply, ReplyDTO.class);
+    }
+
+    // 삭제
+    @Override
+    public void remove(Long rno) {
+
+        // 조회 후 삭제
+
+        Optional<Reply> result = replyRepository.findById(rno);
+
+        Reply reply = result.orElseThrow();
+
+        // 삭제인데 업데이트 하는거랑 같다.
+        reply.changeText("해당 글은 삭제되었습니다.");
+        reply.changeFile(null);
+
+        replyRepository.save(reply);
+    }
+
+    // 수정
+    @Override
+    public void modify(ReplyDTO replyDTO) {
+
+        Optional<Reply> result = replyRepository.findById(replyDTO.getRno());
+
+        Reply reply = result.orElseThrow();
+
+        // 업데이트
+        reply.changeText(replyDTO.getReplyText());
+        reply.changeFile(replyDTO.getReplyFile());
+
+        replyRepository.save(reply);
     }
 }

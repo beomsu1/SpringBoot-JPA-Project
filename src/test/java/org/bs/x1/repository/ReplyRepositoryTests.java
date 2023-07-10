@@ -1,7 +1,10 @@
 package org.bs.x1.repository;
 
+import java.util.Map;
+
 import org.bs.x1.domain.Board;
 import org.bs.x1.domain.Reply;
+import org.bs.x1.dto.ReplyDTO;
 import org.bs.x1.dto.ReplyPageRequestDTO;
 import org.bs.x1.service.ReplyService;
 import org.junit.jupiter.api.Test;
@@ -11,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import lombok.extern.log4j.Log4j2;
 
